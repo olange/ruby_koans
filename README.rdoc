@@ -1,53 +1,60 @@
-= My take at EdgeCase Ruby Koans
+= My take at EdgeCase's Ruby Koans
 
-This is my journey into [EdgeCase's Ruby Koans](http://rubykoans.com/), written by
-Jim Weirich and Joe O'Brien. A nice way to learn a bit more, which I started after
-reading Russ Olsen's exquisite book «Eloquent Ruby».
+This branch is my journey into {EdgeCase's Ruby Koans}[http://rubykoans.com],
+written by Jim Weirich and Joe O'Brien. A nice way along which I could review
+my understanding of the {Ruby language}[http://www.ruby-lang.org], as well as
+learn more about it.
 
-== About EdgeCase Ruby Koans
+== About the Ruby Koans
 
-The Ruby Koans walk you along the path to enlightenment in order to learn Ruby.
+« The Ruby Koans walk you along the path to enlightenment in order to learn Ruby.
 The goal is to learn the Ruby language, syntax, structure, and some common
 functions and libraries. We also teach you culture. Testing is not just something we
-pay lip service to, but something we live.  It is essential in your quest to learn
-and do great things in the language.
+pay lip service to, but something we live. It is essential in your quest to learn
+and do great things in the language. » <em>from the original documentation</em>
 
 == How did I create this branch?
 
-I forked the [ruby_koans repository](https://github.com/edgecase/ruby_koans),
-generated the Koans, then created a new empty branch called `mytake` and did
-copy the generated Koans there:
+I forked the {ruby_koans repository}[https://github.com/edgecase/ruby_koans],
+generated the Koans, {created a new empty branch}[http://book.git-scm.com/5_creating_new_empty_branches.html]
+called +mytake+ and did copy the generated Koans there:
 
-    [ruby_koans] $ rake gen                       # generates the koans directory
+             [~] $ git clone -b master https://github.com/olange/ruby_koans
+             [~] $ cd ruby_koans
+    [ruby_koans] $ rake gen                                 # generates the koans directory
     [ruby_koans] $ mv koans /tmp/koans
-    [ruby_koans] $ git symbolic-ref HEAD refs/heads/mytake
+    [ruby_koans] $ git symbolic-ref HEAD refs/heads/mytake  # create a new empty branch
     [ruby_koans] $ rm .git/index 
     [ruby_koans] $ git clean -fdx 
     [ruby_koans] $ mv /tmp/koans .
     [ruby_koans] $ git add koans
     [ruby_koans] $ git commit -m 'Initial import of the Ruby Koans'
 
-From there one, I started hacking and filling the missing assertions that the
-Koans provide.
+From there, I also did restore the +.gitignore+, +Rakefile+ and +README.rdoc+ files
+and started filling the missing terms within the assertions that the Koans provide.
 
 == Running the tests
 
-Check the original documentation for more information. To get you started on *unix:
+Assuming you have installed Ruby and cloned this branch, here is how you could
+run the Ruby Koans: 
 
     [ruby_koans] $ rake                           # runs the default target :walk_the_path
     [ruby_koans] $ ruby path_to_enlightenment.rb  # simply call the file directly
 
-= Original resources and credits
+Please check out the {original documentation}[https://github.com/edgecase/ruby_koans]
+for more information on installing Ruby and using the Koans.
 
-The Ruby Koans were written by EdgeCase Jim Weirich and Joe O'Brien. Many thanks.
+== Original resources and credits
 
-Ruby Koans Website :: http://rubykoans.com/
+The Ruby Koans were written by EdgeCase Jim Weirich and Joe O'Brien. Many thanks!
+
+Ruby Koans Website :: http://rubykoans.com
 Ruby Koans Git repo :: https://github.com/edgecase/ruby_koans
 
-= License
+== License
 
 http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png
 
-RubyKoans, as well as my modest take at them, are released under a Creative Commons,
+RubyKoans and my modest take at them are released under a Creative Commons,
 Attribution-NonCommercial-ShareAlike, Version 3.0
 (http://creativecommons.org/licenses/by-nc-sa/3.0/) License.

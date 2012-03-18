@@ -1,6 +1,7 @@
 .DS_Store
 .svn
 dist
+doc
 keynote
 rakelib
 src

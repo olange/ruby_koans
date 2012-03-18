@@ -1,0 +1,18 @@
+// Ruby Koans Build System pour éditeur Sublime Text 2
+//
+// Utilisation
+//
+// ( 0. Ouvrir le projet 'ruby-koans' )
+//   1. Sélectionner l'entrée 'ruby-koans' dans le menu Tools > Build System
+//   2. Presser <ALT/CMD>-B et examiner le contenu de la console.
+//
+// Installation
+// 
+//   Placer ce fichier dans le sous-dossier Packages/User/ du dossier de l'application Sublime Text
+//   (qui serait "~/Library/Application Support/Sublime Text 2/Packages/User/" sous Mac OS X Lion)
+{
+	"cmd": [ "ruby", "path_to_enlightenment.rb" ],
+	"env": { "NO_COLOR": "1" },
+	"file_regex": "^  (.+):([0-9]+):.*$",
+	"selector": "source.ruby"
+}

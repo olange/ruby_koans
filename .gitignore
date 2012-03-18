@@ -1,0 +1,10 @@
+.DS_Store
+.svn
+dist
+keynote
+rakelib
+src
+*.sublime-workspace
+.project_env.rc
+.path_progress
+*.rbc

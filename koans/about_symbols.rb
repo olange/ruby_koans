@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 class AboutSymbols < EdgeCase::Koan
   def test_symbols_are_symbols
     symbol = :ruby
-    assert_equal __, symbol.is_a?(Symbol)
+    assert_equal true, symbol.is_a?(Symbol)
   end
 
   def test_symbols_can_be_compared
@@ -11,72 +11,91 @@ class AboutSymbols < EdgeCase::Koan
     symbol2 = :a_symbol
     symbol3 = :something_else
 
-    assert_equal __, symbol1 == symbol2
-    assert_equal __, symbol1 == symbol3
+    assert_equal true, symbol1 == symbol2
+    assert_equal false, symbol1 == symbol3
   end
 
   def test_identical_symbols_are_a_single_internal_object
     symbol1 = :a_symbol
     symbol2 = :a_symbol
 
-    assert_equal __, symbol1           == symbol2
-    assert_equal __, symbol1.object_id == symbol2.object_id
+    assert_equal true, symbol1           == symbol2
+    assert_equal true, symbol1.object_id == symbol2.object_id
   end
 
   def test_method_names_become_symbols
     symbols_as_strings = Symbol.all_symbols.map { |x| x.to_s }
-    assert_equal __, symbols_as_strings.include?("test_method_names_become_symbols")
+    assert_equal true, symbols_as_strings.include?("test_method_names_become_symbols")
   end
 
   # THINK ABOUT IT:
   #
   # Why do we convert the list of symbols to strings and then compare
   # against the string value rather than against symbols?
+  #
+  # ah! I was wondering and just added an assertion to see if the
+  # symbols array would contain a symbol by the name of the method,
+  # which it indeed does. So yes, why did you convert them to strings?
+  #
+  # mmh ^^) aha! Because as soon as you name it, the symbol gets added
+  # to the list of symboles and Symbol.all_symbols.include? :ANY_SYMBOL
+  # is always true. Therefore you need a deep copy of the symbol list,
+  # which the array of string representations provides.
+  #
+  # Another way is to use the to_sym() method on a string; on the 
+  # first call, the symbol is not yet added to the symbol list when
+  # evaluating include?(), but on subsequent calls, its there!
+  #
+  # 001:0>  Symbol.all_symbols.include? "ANYTHING".to_sym
+  # => false
+  # 002:0>  Symbol.all_symbols.include? "ANYTHING".to_sym
+  # => true
 
   in_ruby_version("mri") do
     RubyConstant = "What is the sound of one hand clapping?"
     def test_constants_become_symbols
       all_symbols = Symbol.all_symbols
 
-      assert_equal __, all_symbols.include?(__)
+      assert_equal true, all_symbols.include?( "RubyConstant".to_sym)
     end
   end
 
   def test_symbols_can_be_made_from_strings
     string = "catsAndDogs"
-    assert_equal __, string.to_sym
+    assert_equal :catsAndDogs, string.to_sym
   end
 
   def test_symbols_with_spaces_can_be_built
     symbol = :"cats and dogs"
 
-    assert_equal symbol, __.to_sym
+    assert_equal symbol, "cats and dogs".to_sym
   end
 
   def test_symbols_with_interpolation_can_be_built
     value = "and"
     symbol = :"cats #{value} dogs"
 
-    assert_equal symbol, __.to_sym
+    assert_equal symbol, "cats and dogs".to_sym
   end
 
   def test_to_s_is_called_on_interpolated_symbols
     symbol = :cats
     string = "It is raining #{symbol} and dogs."
 
-    assert_equal __, string
+    assert_equal "It is raining cats and dogs.", string
   end
 
   def test_symbols_are_not_strings
     symbol = :ruby
-    assert_equal __, symbol.is_a?(String)
-    assert_equal __, symbol.eql?("ruby")
+    assert_equal false, symbol.is_a?(String)
+    assert_equal false, symbol.eql?("ruby")
   end
 
   def test_symbols_do_not_have_string_methods
     symbol = :not_a_string
-    assert_equal __, symbol.respond_to?(:each_char)
-    assert_equal __, symbol.respond_to?(:reverse)
+    assert_equal false, symbol.respond_to?(:each_char)
+    assert_equal false, symbol.respond_to?(:reverse)
+    # But these string methods are defined in MacRuby!!
   end
 
   # It's important to realize that symbols are not "immutable
@@ -85,16 +104,22 @@ class AboutSymbols < EdgeCase::Koan
 
   def test_symbols_cannot_be_concatenated
     # Exceptions will be pondered further down the path
-    assert_raise(___) do
+    assert_raise(NoMethodError) do
+      # Attention: pas le même comportement avec MacRuby!
+      # NoMethodError: undefined method `+' for :cats:Symbol (MRI)
+      # TypeError: can't convert Symbol into String (MacRuby)
       :cats + :dogs
     end
   end
 
   def test_symbols_can_be_dynamically_created
-    assert_equal __, ("cats" + "dogs").to_sym
+    assert_equal :catsdogs, ("cats" + "dogs").to_sym
   end
 
   # THINK ABOUT IT:
   #
   # Why is it not a good idea to dynamically create a lot of symbols?
+  #
+  # It slows down the interpretation of code, as every constant, variable
+  # and method reference probably costs a lookup of the symbol list.
 end
